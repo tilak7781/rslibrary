@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="RS Library is a calm student reading room: bring your books—we keep seats, AC, water, and washrooms ready."
+    />
+    <meta name="theme-color" content="#7c3aed" />
+    <meta property="og:title" content="RS Library — Quiet study hall" />
+    <meta
+      property="og:description"
+      content="A quiet hall for revision—your textbooks and notes, our tables, AC, drinking water, and washrooms."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="RS Library — Quiet study hall" />
+    <meta
+      name="twitter:description"
+      content="Student reading room: BYO books & notes; we provide seating, AC, water, and washrooms."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>RS Library — Quiet study hall</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('rs-library-theme')
+          if (t === 'light' || t === 'dark') {
+            document.documentElement.setAttribute('data-theme', t)
+          } else if (matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark')
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light')
+          }
+          var l = localStorage.getItem('rs-library-lang')
+          document.documentElement.lang = l === 'hi' ? 'hi' : 'en'
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light')
+          document.documentElement.lang = 'en'
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
