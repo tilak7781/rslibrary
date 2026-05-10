@@ -1,0 +1,9 @@
+# RS Library — Apache (GoDaddy cPanel). Copied to site root with `index.html` via `npm run build`.
+# Navigation uses #anchors only; no SPA rewrite needed.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Uncomment the next two lines only after SSL is active for your domain in cPanel.
+  # RewriteCond %{HTTPS} !=on
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>

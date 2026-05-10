@@ -15,6 +15,7 @@ dist-ssr
 # API keys (copy from .env.example)
 .env
 .env.production
+.env.godaddy
 
 # Editor directories and files
 .vscode/*
