@@ -2,6 +2,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_WEB3FORMS_ACCESS_KEY?: string
+  /** Same-origin path for Netlify Function proxy, e.g. `/api/contact` */
+  readonly VITE_CONTACT_SUBMIT_URL?: string
   readonly VITE_CONTACT_FORM_ACTION?: string
   /** Multi-line OK in .env — use real newlines between lines */
   readonly VITE_ADDRESS_LINES?: string

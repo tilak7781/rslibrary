@@ -20,6 +20,29 @@ const CONTACT_INBOX = 'tilakbhati91@gmail.com'
 const FORMSUBMIT_AJAX = `https://formsubmit.co/ajax/${CONTACT_INBOX}`
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
 
+async function postWeb3Json(
+  url: string,
+  body: Record<string, string>,
+): Promise<void> {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  const data = (await res.json().catch(() => null)) as {
+    success?: boolean
+    message?: string
+  } | null
+  if (!res.ok || !data?.success) {
+    throw new Error(
+      data?.message ?? 'Could not send message. Try again shortly.',
+    )
+  }
+}
+
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
 }
@@ -67,6 +90,7 @@ export function ContactForm() {
   const successRef = useRef<HTMLDivElement>(null)
 
   const web3AccessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY?.trim()
+  const submitProxyUrl = import.meta.env.VITE_CONTACT_SUBMIT_URL?.trim()
   const customFormEndpoint = import.meta.env.VITE_CONTACT_FORM_ACTION?.trim()
 
   useEffect(() => {
@@ -140,36 +164,33 @@ export function ContactForm() {
     const fullMessage = `${trimmedMessage}${extra}\n\n${consentLine}`
 
     try {
-      if (web3AccessKey) {
-        const res = await fetch(WEB3FORMS_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            access_key: web3AccessKey,
-            subject: sub || 'RS Library — contact form',
-            from_name: 'RS Library website',
-            name: name.trim(),
-            email: email.trim(),
-            replyto: email.trim(),
-            message: fullMessage,
-            botcheck: honeypotRef.current?.value ?? '',
-          }),
+      if (submitProxyUrl) {
+        await postWeb3Json(submitProxyUrl, {
+          subject: sub || 'RS Library — contact form',
+          from_name: 'RS Library website',
+          name: name.trim(),
+          email: email.trim(),
+          replyto: email.trim(),
+          message: fullMessage,
+          botcheck: honeypotRef.current?.value ?? '',
         })
+        setStatus('success')
+        setServerMessage(fc.success.thanks)
+        resetFields()
+        return
+      }
 
-        const data = (await res.json().catch(() => null)) as {
-          success?: boolean
-          message?: string
-        } | null
-
-        if (!res.ok || !data?.success) {
-          throw new Error(
-            data?.message ?? 'Could not send message. Try again shortly.',
-          )
-        }
-
+      if (web3AccessKey) {
+        await postWeb3Json(WEB3FORMS_URL, {
+          access_key: web3AccessKey,
+          subject: sub || 'RS Library — contact form',
+          from_name: 'RS Library website',
+          name: name.trim(),
+          email: email.trim(),
+          replyto: email.trim(),
+          message: fullMessage,
+          botcheck: honeypotRef.current?.value ?? '',
+        })
         setStatus('success')
         setServerMessage(fc.success.thanks)
         resetFields()
