@@ -49,12 +49,20 @@ export const handler = async (event) => {
 
   const forward = { ...payload, access_key: key }
 
+  const h = event.headers || {}
+  const referer = h.referer || h.Referer
+  const origin = h.origin || h.Origin
+  /** Helps Web3Forms associate submissions with your site when the POST is server-side. */
+  const wfHeaders = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
+  if (referer) wfHeaders.Referer = referer
+  if (origin) wfHeaders.Origin = origin
+
   const res = await fetch(WEB3, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
+    headers: wfHeaders,
     body: JSON.stringify(forward),
   })
 
