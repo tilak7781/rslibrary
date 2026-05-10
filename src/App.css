@@ -678,6 +678,11 @@ main section[id] {
   cursor: not-allowed;
 }
 
+.btn--compact {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+}
+
 .btn--primary {
   color: var(--text-h);
   background: var(--accent-soft);
@@ -1002,6 +1007,13 @@ main section[id] {
   text-decoration: underline;
 }
 
+.visit-card__toolbar {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
 .map-frame {
   margin-top: clamp(1.5rem, 3vw, 2rem);
 }
@@ -1034,6 +1046,18 @@ main section[id] {
   width: 100%;
   height: min(52vh, 380px);
   border: 0;
+}
+
+.map-frame__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: min(52vh, 380px);
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: color-mix(in srgb, var(--panel-muted) 55%, var(--bg-elevated));
 }
 
 .rules-list {
@@ -1130,4 +1154,152 @@ main section[id] {
     padding: 0.75rem;
     border-radius: 50%;
   }
+}
+
+.site-announce {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem max(var(--content-pad-x), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--content-pad-x), env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--text-h);
+  font-size: clamp(0.82rem, 1.15vw, 0.9rem);
+  line-height: 1.45;
+}
+
+.site-announce__text {
+  flex: 1;
+  min-width: min(100%, 12rem);
+}
+
+.site-announce__dismiss {
+  flex-shrink: 0;
+  margin-top: -0.1rem;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.faq-item {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+.faq-item__q {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  font-size: clamp(0.92rem, 1.35vw, 1rem);
+  color: var(--text-h);
+  padding: 0.85rem 1rem;
+  line-height: 1.45;
+}
+
+.faq-item__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item__q::after {
+  content: '+';
+  float: right;
+  font-weight: 700;
+  color: var(--accent);
+  margin-left: 0.5rem;
+}
+
+.faq-item[open] .faq-item__q::after {
+  content: '−';
+}
+
+.faq-item__a {
+  margin: 0;
+  padding: 0 1rem 1rem;
+  font-size: clamp(0.88rem, 1.2vw, 0.95rem);
+  line-height: 1.58;
+  color: var(--text);
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  padding-top: 0.75rem;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  left: max(1rem, env(safe-area-inset-left, 0px));
+  z-index: 39;
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-h);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.back-to-top:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site-toast {
+  position: fixed;
+  bottom: max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 4.5rem));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--text-h);
+  color: var(--bg-elevated);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+.site-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  width: 100%;
+}
+
+.site-footer__social-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+  justify-content: center;
+}
+
+.site-footer__social-list a {
+  white-space: nowrap;
 }

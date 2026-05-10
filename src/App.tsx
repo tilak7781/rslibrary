@@ -1,6 +1,12 @@
+import { useCallback, useEffect, useState } from 'react'
+import { AnnouncementBar } from './AnnouncementBar'
+import { BackToTop } from './BackToTop'
 import { ContactForm } from './ContactForm'
+import { copyToClipboard } from './copyToClipboard'
 import { useSitePreferences } from './context/SitePreferences.tsx'
+import { JsonLd } from './JsonLd'
 import {
+  getGoogleMapsSearchUrl,
   getMapEmbedSrc,
   normalizeWhatsAppDigits,
   phoneTelHref,
@@ -12,17 +18,72 @@ import './App.css'
 function App() {
   const { locale, setLocale, theme, toggleTheme } = useSitePreferences()
   const t = uiCopy[locale]
+  const [toast, setToast] = useState<string | null>(null)
 
   const telHref = phoneTelHref(siteConfig.phoneRaw)
-  const waDigits = normalizeWhatsAppDigits(siteConfig.whatsappRaw)
+  const waDigits = normalizeWhatsAppDigits(
+    siteConfig.whatsappRaw || siteConfig.phoneRaw,
+  )
   const phoneLabel =
     siteConfig.phoneDisplay || siteConfig.phoneRaw || '—'
 
+  const mapEmbedSrc = getMapEmbedSrc()
+  const mapsSearchUrl = getGoogleMapsSearchUrl()
+
+  const addressClipboard = siteConfig.addressLines.join('\n')
+  const hoursClipboard = siteConfig.hoursLines.join('\n')
+
+  const pushToast = useCallback((msg: string) => {
+    setToast(msg)
+  }, [])
+
+  useEffect(() => {
+    if (!toast) return
+    const id = window.setTimeout(() => setToast(null), 2400)
+    return () => window.clearTimeout(id)
+  }, [toast])
+
+  const copyAddress = async () => {
+    const ok = await copyToClipboard(addressClipboard)
+    pushToast(ok ? t.visit.addressCopied : t.quickActions.copyFailed)
+  }
+
+  const copyHours = async () => {
+    const ok = await copyToClipboard(hoursClipboard)
+    pushToast(ok ? t.visit.hoursCopied : t.quickActions.copyFailed)
+  }
+
+  const sharePage = async () => {
+    const url = window.location.href
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: 'RS Library',
+          url,
+        })
+        pushToast(t.quickActions.shared)
+        return
+      } catch (err: unknown) {
+        const name =
+          err && typeof err === 'object' && 'name' in err
+            ? String((err as { name: unknown }).name)
+            : ''
+        if (name === 'AbortError') return
+      }
+    }
+    const ok = await copyToClipboard(url)
+    pushToast(ok ? t.quickActions.linkCopied : t.quickActions.copyFailed)
+  }
+
   return (
     <div className="site">
+      <JsonLd />
       <a className="skip-link" href="#main-content">
         {t.skipLink}
       </a>
+
+      <AnnouncementBar dismissLabel={t.layout.announceDismiss} />
 
       <header className="site-header">
         <div className="site-header__row">
@@ -82,6 +143,9 @@ function App() {
               <a href="#rules">{t.nav.rules}</a>
             </li>
             <li>
+              <a href="#faq">{t.nav.faq}</a>
+            </li>
+            <li>
               <a href="#gallery">{t.nav.gallery}</a>
             </li>
             <li>
@@ -118,6 +182,13 @@ function App() {
                 <a className="btn btn--outline" href="#facilities">
                   {t.hero.ctaAmenities}
                 </a>
+                <button
+                  type="button"
+                  className="btn btn--outline"
+                  onClick={() => void sharePage()}
+                >
+                  {t.quickActions.sharePage}
+                </button>
               </div>
             </div>
             <aside className="hero__aside" aria-label={t.hero.asideLabel}>
@@ -189,6 +260,17 @@ function App() {
                     </span>
                   ))}
                 </address>
+                {siteConfig.addressLines.length > 0 ? (
+                  <div className="visit-card__toolbar">
+                    <button
+                      type="button"
+                      className="btn btn--ghost btn--compact"
+                      onClick={() => void copyAddress()}
+                    >
+                      {t.visit.copyAddress}
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="visit-card">
                 <h3 className="visit-card__label">{t.visit.hours}</h3>
@@ -199,6 +281,17 @@ function App() {
                     </p>
                   ))}
                 </div>
+                {siteConfig.hoursLines.length > 0 ? (
+                  <div className="visit-card__toolbar">
+                    <button
+                      type="button"
+                      className="btn btn--ghost btn--compact"
+                      onClick={() => void copyHours()}
+                    >
+                      {t.visit.copyHours}
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="visit-card visit-card--wide">
                 <h3 className="visit-card__label">{t.visit.fees}</h3>
@@ -237,14 +330,27 @@ function App() {
             <div className="map-frame">
               <h3 className="map-frame__title">{t.visit.mapTitle}</h3>
               <p className="map-frame__hint">{t.visit.directionsPlaceholder}</p>
-              <div className="map-frame__embed">
-                <iframe
-                  title={t.visit.mapTitle}
-                  src={getMapEmbedSrc()}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
+              {mapEmbedSrc ? (
+                <div className="map-frame__embed">
+                  <iframe
+                    title={t.visit.mapTitle}
+                    src={mapEmbedSrc}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              ) : (
+                <div className="map-frame__fallback">
+                  <a
+                    className="btn btn--primary"
+                    href={mapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t.visit.openInMaps}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -263,7 +369,28 @@ function App() {
           </div>
         </section>
 
-        <section id="gallery" className="panel panel--muted" aria-labelledby="gallery-title">
+        <section
+          id="faq"
+          className="panel panel--muted"
+          aria-labelledby="faq-title"
+        >
+          <div className="panel__inner">
+            <h2 id="faq-title" className="section-title">
+              {t.faq.title}
+            </h2>
+            <p className="lead">{t.faq.intro}</p>
+            <div className="faq-list">
+              {t.faq.items.map((item) => (
+                <details key={item.q} className="faq-item">
+                  <summary className="faq-item__q">{item.q}</summary>
+                  <p className="faq-item__a">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="gallery" className="panel" aria-labelledby="gallery-title">
           <div className="panel__inner panel__inner--wide">
             <h2 id="gallery-title" className="section-title">
               {t.gallery.title}
@@ -320,13 +447,43 @@ function App() {
 
       <footer className="site-footer">
         <div className="site-footer__inner">
-          <p className="site-footer__brand">{t.footer.brand}</p>
+          <div className="site-footer__top">
+            <p className="site-footer__brand">{t.footer.brand}</p>
+            {siteConfig.socialLinks.length > 0 ? (
+              <nav
+                className="site-footer__social"
+                aria-label={t.footer.socialHeading}
+              >
+                <ul className="site-footer__social-list">
+                  {siteConfig.socialLinks.map((link) => (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ) : null}
+          </div>
           <p className="site-footer__legal">
             {t.footer.copyright} {new Date().getFullYear()} RS Library ·{' '}
             <a href="#privacy">{t.footer.privacy}</a>
           </p>
         </div>
       </footer>
+
+      {toast ? (
+        <div className="site-toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      ) : null}
+
+      <BackToTop label={t.layout.backToTop} />
 
       {waDigits ? (
         <a

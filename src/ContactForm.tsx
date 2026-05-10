@@ -150,6 +150,7 @@ export function ContactForm() {
           body: JSON.stringify({
             access_key: web3AccessKey,
             subject: sub || 'RS Library — contact form',
+            from_name: 'RS Library website',
             name: name.trim(),
             email: email.trim(),
             replyto: email.trim(),

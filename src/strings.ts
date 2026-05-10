@@ -8,6 +8,7 @@ export type UiCopy = {
     amenities: string
     visit: string
     rules: string
+    faq: string
     gallery: string
     contact: string
     privacy: string
@@ -48,8 +49,18 @@ export type UiCopy = {
     whatsapp: string
     mapTitle: string
     directionsPlaceholder: string
+    openInMaps: string
+    copyAddress: string
+    addressCopied: string
+    copyHours: string
+    hoursCopied: string
   }
   rules: { title: string; intro: string; items: string[] }
+  faq: {
+    title: string
+    intro: string
+    items: { q: string; a: string }[]
+  }
   gallery: {
     title: string
     intro: string
@@ -57,7 +68,15 @@ export type UiCopy = {
   }
   contact: { title: string; lead: string; fine: string }
   privacy: { title: string; body: string }
-  footer: { brand: string; privacy: string; copyright: string }
+  footer: { brand: string; privacy: string; copyright: string; socialHeading: string }
+  quickActions: {
+    copyLink: string
+    linkCopied: string
+    sharePage: string
+    shared: string
+    copyFailed: string
+  }
+  layout: { backToTop: string; announceDismiss: string }
   waFab: string
 }
 
@@ -69,6 +88,7 @@ const EN: UiCopy = {
     amenities: 'Amenities',
     visit: 'Visit',
     rules: 'Rules',
+    faq: 'FAQ',
     gallery: 'Gallery',
     contact: 'Contact',
     privacy: 'Privacy',
@@ -138,6 +158,11 @@ const EN: UiCopy = {
     mapTitle: 'Map',
     directionsPlaceholder:
       'Update VITE_MAP_QUERY or paste VITE_MAP_EMBED_URL for an exact pin.',
+    openInMaps: 'Open in Google Maps',
+    copyAddress: 'Copy address',
+    addressCopied: 'Address copied',
+    copyHours: 'Copy hours',
+    hoursCopied: 'Hours copied',
   },
   rules: {
     title: 'House rules',
@@ -149,6 +174,33 @@ const EN: UiCopy = {
       'No food that smells strongly or makes a mess; drinks with lids are safer.',
       'Keep desks tidy; don’t save seats for people who aren’t here yet.',
       'Respect staff directions—they’re keeping the space fair for all.',
+    ],
+  },
+  faq: {
+    title: 'Common questions',
+    intro:
+      'Quick answers before you visit. For anything else, use the contact form or call us.',
+    items: [
+      {
+        q: 'Do you lend or sell textbooks?',
+        a: 'No. RS Library is a reading hall only—we don’t issue books or run a shop. Bring every title, handout, or device you need for your session.',
+      },
+      {
+        q: 'Is Wi‑Fi available?',
+        a: 'We don’t promise public Wi‑Fi on this site. Ask staff when you arrive; policies can change with equipment upgrades.',
+      },
+      {
+        q: 'Can I reserve a seat in advance?',
+        a: 'Seating is usually first-come during open hours. If we run a special arrangement, we’ll mention it at the desk or on notices.',
+      },
+      {
+        q: 'What about food and drinks?',
+        a: 'Drinks with lids are safest. Please avoid strong smells or messy food so neighbours can focus. When in doubt, step outside for a snack.',
+      },
+      {
+        q: 'How do fees work?',
+        a: 'Rates can change by season or seating type. Read the Fees card on this page, or message us for the latest daily or monthly options.',
+      },
     ],
   },
   gallery: {
@@ -173,6 +225,18 @@ const EN: UiCopy = {
     brand: 'RS Library · Quiet study hall',
     privacy: 'Privacy',
     copyright: '©',
+    socialHeading: 'Follow & links',
+  },
+  quickActions: {
+    copyLink: 'Copy page link',
+    linkCopied: 'Link copied to clipboard',
+    sharePage: 'Share page',
+    shared: 'Thanks for sharing',
+    copyFailed: 'Could not copy — copy the URL from the address bar.',
+  },
+  layout: {
+    backToTop: 'Back to top',
+    announceDismiss: 'Dismiss',
   },
   waFab: 'Chat on WhatsApp',
 }
@@ -185,6 +249,7 @@ const HI: UiCopy = {
     amenities: 'सुविधाएँ',
     visit: 'आगमन',
     rules: 'नियम',
+    faq: 'प्रश्न',
     gallery: 'गैलरी',
     contact: 'संपर्क',
     privacy: 'गोपनीयता',
@@ -249,6 +314,11 @@ const HI: UiCopy = {
     mapTitle: 'नक्शा',
     directionsPlaceholder:
       'सटीक लोकेशन के लिए VITE_MAP_QUERY अपडेट करें या VITE_MAP_EMBED_URL चिपकाएँ।',
+    openInMaps: 'Google Maps में खोलें',
+    copyAddress: 'पता कॉपी करें',
+    addressCopied: 'पता कॉपी हो गया',
+    copyHours: 'समय कॉपी करें',
+    hoursCopied: 'समय कॉपी हो गया',
   },
   rules: {
     title: 'अंदरूनी नियम',
@@ -260,6 +330,33 @@ const HI: UiCopy = {
       'तीखी गंध या गंदगी वाला खाना नहीं; ढक्कन वाले पेय सुरक्षित हैं।',
       'मेज़ साफ़ रखें; यहाँ नहीं बैठे लोगों के लिए सीट न बचाएँ।',
       'स्टाफ के निर्देश मानें—वे सबके लिए निष्पक्षता बनाए रखते हैं।',
+    ],
+  },
+  faq: {
+    title: 'अक्सर पूछे जाने वाले प्रश्न',
+    intro:
+      'आने से पहले संक्षिप्त जवाब। और कुछ हो तो संपर्क फ़ॉर्म या फ़ोन से पूछें।',
+    items: [
+      {
+        q: 'क्या आप पाठ्यपुस्तकें उधार या बेचते हैं?',
+        a: 'नहीं। RS Library केवल पठन कक्ष है—हम किताबें जारी नहीं करते न दुकान चलाते। अपनी हर किताब, हैंडआउट या डिवाइस साथ लाएँ।',
+      },
+      {
+        q: 'क्या Wi‑Fi मिलता है?',
+        a: 'इस साइट पर सार्वजनिक Wi‑Fi की गारंटी नहीं देते। आने पर स्टाफ से पूछें; उपकरण बदलने पर नीति बदल सकती है।',
+      },
+      {
+        q: 'क्या पहले से सीट बुक कर सकते हैं?',
+        a: 'आमतौर पर खुले समय में पहले आओ पहले पाओ। अगर कोई विशेष व्यवस्था होगी तो डेस्क या सूचना पर बताएँगे।',
+      },
+      {
+        q: 'खान-पान कैसा रखें?',
+        a: 'ढक्कन वाले पेय सुरक्षित हैं। तेज़ गंध या गंदगी वाला खाना टालें ताकि बगल वाले ध्यान लगा सकें। संदेह हो तो बाहर नाश्ता करें।',
+      },
+      {
+        q: 'शुल्क कैसे लगते हैं?',
+        a: 'दरें मौसम या सीट प्रकार से बदल सकती हैं। इस पृष्ठ पर शुल्क कार्ड देखें या नवीनतम दैनिक/मासिक विकल्प के लिए संदेश भेजें।',
+      },
     ],
   },
   gallery: {
@@ -284,6 +381,18 @@ const HI: UiCopy = {
     brand: 'RS Library · शांत अध्ययन हॉल',
     privacy: 'गोपनीयता',
     copyright: '©',
+    socialHeading: 'लिंक और सोशल',
+  },
+  quickActions: {
+    copyLink: 'पेज लिंक कॉपी करें',
+    linkCopied: 'लिंक क्लिपबोर्ड पर कॉपी हो गया',
+    sharePage: 'पेज शेयर करें',
+    shared: 'शेयर के लिए धन्यवाद',
+    copyFailed: 'कॉपी नहीं हो सका — पता बार से URL कॉपी करें।',
+  },
+  layout: {
+    backToTop: 'ऊपर जाएँ',
+    announceDismiss: 'बंद करें',
   },
   waFab: 'व्हाट्सऐप पर चैट',
 }
@@ -364,7 +473,7 @@ const FORM_EN: FormCopy = {
     thanksShort: 'Thank you for reaching out.',
   },
   formSubmitNote:
-    'FormSubmit accepted this submission. If no email arrives soon, check Spam and confirm any FormSubmit “Activate form” message. For stronger delivery, add VITE_WEB3FORMS_ACCESS_KEY (see .env.example).',
+    'FormSubmit accepted this submission (the API can say “success” before mail is reliable). Check Spam and open any FormSubmit “Activate form” email for tilakbhati91@gmail.com. On Netlify: add VITE_WEB3FORMS_ACCESS_KEY under Site configuration → Environment variables, save, then trigger a new deploy (Clear cache and deploy). Add your Netlify URL in the Web3Forms dashboard if it asks for allowed domains.',
 }
 
 const FORM_HI: FormCopy = {
@@ -409,7 +518,7 @@ const FORM_HI: FormCopy = {
     thanksShort: 'संपर्क करने के लिए धन्यवाद।',
   },
   formSubmitNote:
-    'FormSubmit ने स्वीकार किया। यदि ईमेल न आए तो स्पैम जाँचें और FormSubmit सक्रियकरण ईमेल की पुष्टि करें। बेहतर डिलीवरी के लिए VITE_WEB3FORMS_ACCESS_KEY देखें (.env.example)।',
+    'FormSubmit ने स्वीकार किया (कभी-कभी “सफल” दिखता है पर मेल देर से आती है)। स्पैम जाँचें; tilakbhati91@gmail.com पर FormSubmit सक्रियकरण ईमेल खोलें। Netlify पर: Site configuration → Environment variables में VITE_WEB3FORMS_ACCESS_KEY सेट करें, सेव करें, फिर नया डिप्लॉय करें (Clear cache and deploy)। Web3Forms में अपनी Netlify URL अनुमत डोमेन में जोड़ें।',
 }
 
 export const formCopy: Record<Locale, FormCopy> = {

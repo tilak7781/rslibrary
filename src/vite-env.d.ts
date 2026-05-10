@@ -12,4 +12,8 @@ interface ImportMetaEnv {
   readonly VITE_WHATSAPP?: string
   readonly VITE_MAP_QUERY?: string
   readonly VITE_MAP_EMBED_URL?: string
+  /** Banner under header; use `|` or newlines between lines */
+  readonly VITE_ANNOUNCEMENT?: string
+  /** Footer links: `Label~https://…` pairs, several separated by `|` */
+  readonly VITE_SOCIAL_LINKS?: string
 }
