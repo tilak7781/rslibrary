@@ -64,6 +64,10 @@ function announcementLinesFromEnv(): string[] {
   return splitLines(raw, raw);
 }
 
+const envPhone = import.meta.env.VITE_PHONE?.trim() || "";
+const envWhatsapp = import.meta.env.VITE_WHATSAPP?.trim() || "";
+const envPhoneDisplay = import.meta.env.VITE_PHONE_DISPLAY?.trim() || "";
+
 export const siteConfig = {
   announcementLines: announcementLinesFromEnv(),
   socialLinks: parseSocialLinks(import.meta.env.VITE_SOCIAL_LINKS),
@@ -78,12 +82,10 @@ export const siteConfig = {
   feeNote:
     import.meta.env.VITE_FEE_NOTE?.trim() ||
     "Ask at the desk for current daily / monthly seating rates.",
-  phoneDisplay:
-    import.meta.env.VITE_PHONE_DISPLAY?.trim() ||
-    import.meta.env.VITE_PHONE?.trim() ||
-    "",
-  phoneRaw: import.meta.env.VITE_PHONE?.trim() || "",
-  whatsappRaw: import.meta.env.VITE_WHATSAPP?.trim() || "",
+  /** Call card + tel: — uses PHONE, or WHATSAPP if PHONE is unset */
+  phoneDisplay: envPhoneDisplay || envPhone || envWhatsapp || "",
+  phoneRaw: envPhone || envWhatsapp || "",
+  whatsappRaw: envWhatsapp || "",
   mapEmbedUrl: import.meta.env.VITE_MAP_EMBED_URL?.trim() || "",
   mapQuery:
     import.meta.env.VITE_MAP_QUERY?.trim() ||
