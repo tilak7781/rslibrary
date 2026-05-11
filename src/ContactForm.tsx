@@ -32,11 +32,20 @@ async function postWeb3Json(
     },
     body: JSON.stringify(body),
   })
-  const data = (await res.json().catch(() => null)) as {
-    success?: boolean
-    message?: string
-  } | null
-  if (!res.ok || !data?.success) {
+  const text = await res.text()
+  let data: { success?: boolean; message?: string }
+  try {
+    data = JSON.parse(text) as { success?: boolean; message?: string }
+  } catch {
+    const staticHint =
+      res.status === 404 && url.startsWith('/')
+        ? ' This host has no /api/contact (use VITE_WEB3FORMS_ACCESS_KEY and remove VITE_CONTACT_SUBMIT_URL for static hosting).'
+        : ''
+    throw new Error(
+      `Could not send message (HTTP ${res.status}).${staticHint}`,
+    )
+  }
+  if (!res.ok || !data.success) {
     throw new Error(
       data?.message ?? 'Could not send message. Try again shortly.',
     )
@@ -164,8 +173,11 @@ export function ContactForm() {
     const fullMessage = `${trimmedMessage}${extra}\n\n${consentLine}`
 
     try {
-      if (submitProxyUrl) {
-        await postWeb3Json(submitProxyUrl, {
+      // Prefer browser → Web3Forms when the key is in the bundle (works on Netlify, GoDaddy,
+      // custom domains). Netlify proxy is only for builds that omit the key from the client.
+      if (web3AccessKey) {
+        await postWeb3Json(WEB3FORMS_URL, {
+          access_key: web3AccessKey,
           subject: sub || 'RS Library — contact form',
           from_name: 'RS Library website',
           name: name.trim(),
@@ -180,9 +192,8 @@ export function ContactForm() {
         return
       }
 
-      if (web3AccessKey) {
-        await postWeb3Json(WEB3FORMS_URL, {
-          access_key: web3AccessKey,
+      if (submitProxyUrl) {
+        await postWeb3Json(submitProxyUrl, {
           subject: sub || 'RS Library — contact form',
           from_name: 'RS Library website',
           name: name.trim(),
