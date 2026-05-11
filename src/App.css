@@ -869,6 +869,12 @@ main section[id] {
   color: var(--text-h);
 }
 
+.form-banner--warning {
+  background: color-mix(in srgb, #d97706 16%, var(--bg-elevated));
+  color: var(--text-h);
+  border: 1px solid color-mix(in srgb, #d97706 35%, var(--border));
+}
+
 .form-feedback {
   padding: clamp(1.25rem, 3vw, 1.65rem);
   border-radius: var(--radius-md);

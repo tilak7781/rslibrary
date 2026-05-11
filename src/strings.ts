@@ -430,6 +430,8 @@ export type FormCopy = {
   actions: { send: string; sending: string; sendAnother: string }
   success: { title: string; thanks: string; thanksShort: string }
   formSubmitNote: string
+  /** Shown only in production when env was not baked into the build */
+  warnings: { missingEmailProvider: string }
 }
 
 const FORM_EN: FormCopy = {
@@ -474,6 +476,10 @@ const FORM_EN: FormCopy = {
   },
   formSubmitNote:
     'FormSubmit accepted this submission (the API can say “success” before mail is reliable). Check Spam and open any FormSubmit “Activate form” email for tilakbhati91@gmail.com. On Netlify: add VITE_WEB3FORMS_ACCESS_KEY under Site configuration → Environment variables, save, then trigger a new deploy (Clear cache and deploy). Add your Netlify URL in the Web3Forms dashboard if it asks for allowed domains.',
+  warnings: {
+    missingEmailProvider:
+      'This live build has no Web3Forms key and no contact API URL. Add VITE_WEB3FORMS_ACCESS_KEY to your host’s build environment (Netlify / CI), save, then redeploy so `npm run build` can embed it. Dev works because `.env.development` is not used in production builds.',
+  },
 }
 
 const FORM_HI: FormCopy = {
@@ -519,6 +525,10 @@ const FORM_HI: FormCopy = {
   },
   formSubmitNote:
     'FormSubmit ने स्वीकार किया (कभी-कभी “सफल” दिखता है पर मेल देर से आती है)। स्पैम जाँचें; tilakbhati91@gmail.com पर FormSubmit सक्रियकरण ईमेल खोलें। Netlify पर: Site configuration → Environment variables में VITE_WEB3FORMS_ACCESS_KEY सेट करें, सेव करें, फिर नया डिप्लॉय करें (Clear cache and deploy)। Web3Forms में अपनी Netlify URL अनुमत डोमेन में जोड़ें।',
+  warnings: {
+    missingEmailProvider:
+      'इस लाइव बिल्ड में Web3Forms कुंजी या संपर्क API URL नहीं है। अपने होस्ट (Netlify/CI) की बिल्ड सेटिंग में VITE_WEB3FORMS_ACCESS_KEY जोड़ें, सेव करें, फिर `npm run build` के साथ फिर से डिप्लॉय करें। डेवलपमेंट में `.env.development` काम करता है पर प्रोडक्शन बिल्ड में वह लोड नहीं होता।',
+  },
 }
 
 export const formCopy: Record<Locale, FormCopy> = {

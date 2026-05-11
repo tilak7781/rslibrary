@@ -101,6 +101,9 @@ export function ContactForm() {
   const web3AccessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY?.trim()
   const submitProxyUrl = import.meta.env.VITE_CONTACT_SUBMIT_URL?.trim()
   const customFormEndpoint = import.meta.env.VITE_CONTACT_FORM_ACTION?.trim()
+  const hasReliableEmailProvider = Boolean(
+    web3AccessKey || submitProxyUrl || customFormEndpoint,
+  )
 
   useEffect(() => {
     if (status !== 'success' || !successRef.current) return
@@ -320,6 +323,12 @@ export function ContactForm() {
         aria-hidden="true"
         className="hp-field"
       />
+
+      {import.meta.env.PROD && !hasReliableEmailProvider ? (
+        <p className="form-banner form-banner--warning" role="alert">
+          {fc.warnings.missingEmailProvider}
+        </p>
+      ) : null}
 
       <div className="field">
         <label htmlFor="contact-name">{fc.labels.name}</label>
