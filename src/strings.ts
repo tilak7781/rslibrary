@@ -157,8 +157,7 @@ const EN: UiCopy = {
     call: "Call",
     whatsapp: "WhatsApp",
     mapTitle: "Map",
-    directionsPlaceholder:
-      "Update VITE_MAP_QUERY or paste VITE_MAP_EMBED_URL for an exact pin.",
+    directionsPlaceholder: "",
     openInMaps: "Open in Google Maps",
     copyAddress: "Copy address",
     addressCopied: "Address copied",
