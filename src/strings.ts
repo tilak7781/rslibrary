@@ -205,8 +205,7 @@ const EN: UiCopy = {
   },
   gallery: {
     title: "Inside the space",
-    intro:
-      "Placeholder tiles below—swap in real photos of your tables, AC area, and water station when you have them.",
+    intro: "",
     captions: ["Study floor", "Cool & seating", "Water corner"],
   },
   contact: {
